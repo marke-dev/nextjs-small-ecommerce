@@ -1,0 +1,28 @@
+providers = ["node"]
+buildImage = 'ghcr.io/railwayapp/nixpacks:ubuntu-1707782610'
+
+[variables]
+CI = 'true'
+NIXPACKS_METADATA = 'node'
+NODE_ENV = 'production'
+NPM_CONFIG_PRODUCTION = 'true'
+
+[phases.build]
+dependsOn = ['install']
+cmds = ['npx turbo run build']
+
+[phases.install]
+dependsOn = ['setup']
+cmds = ['npx bun install']
+
+[phases.setup]
+nixPkgs = [
+'nodejs_21',
+'npm-9_x',
+]
+
+[start]
+cmd = 'npx turbo run start'
+
+nixOverlays = ['https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz']
+nixpkgsArchive = 'bf744fe90419885eefced41b3e5ae442d732712d'
